@@ -1,0 +1,114 @@
+import java.io.*;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+ 
+public class convert
+{
+    static Document document;
+    String[] list;
+   
+    public static void main(String string[])
+    {
+ 
+        convert demo = new convert("C:/Users/Ryudo/Desktop/Proj/CSV2XML/test.xml");
+       
+        demo.createXMLBasic();
+        demo.loadCSV("C:/Users/Ryudo/Desktop/Proj/CSV2XML/test.csv");
+        demo.speichern("C:/Users/Ryudo/Desktop/Proj/CSV2XML/test.xml");
+    }
+ 
+    public convert(String string)
+    {
+        newXMLFile(string);
+    }
+ 
+    public void newXMLFile(String string)
+    {  
+        try
+        {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            document = builder.newDocument();
+        }
+        catch (ParserConfigurationException pce)
+        {
+            pce.printStackTrace();
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+        }
+    }
+ 
+    public void createXMLBasic()
+    {
+        Element root = document.createElement("Person");
+        document.appendChild(root);
+    }
+ 
+    public void loadCSV(String string)
+    {
+        // Methode zum Laden von CSV
+       
+        String Zeile = "";
+        try
+        {
+            FileReader Eingabestrom = new FileReader(string);
+            BufferedReader input = new BufferedReader(Eingabestrom);
+ 
+ 
+            while ((Zeile = input.readLine()) != null)
+            {
+                list = Zeile.split(";");           
+                for(int i =0; i<list.length ;i++)
+                {              
+                    addData(list[i]);
+ 
+                }
+            }          
+            while (Zeile != null);
+            input.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+ 
+   
+    public void addData(String data)
+    {
+        Element root = document.getDocumentElement();
+ 
+        try
+        {          
+            Element element = document.createElement(list[0]);
+            root.appendChild(element);
+                       
+            element.appendChild(document.createTextNode(data));
+        }
+        catch (DOMException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+   
+    public void speichern(String string)
+    {
+        try
+        {
+            FileWriter Ausgabestrom = new FileWriter(string);
+            BufferedWriter output = new BufferedWriter(Ausgabestrom);
+           
+            String inhalt = "<?xml version='1.0' encoding='iso-8859-1' ?>\n";
+            inhalt = inhalt + document.getDocumentElement().toString();
+            System.out.println(inhalt); //Test
+            output.write(inhalt, 0, inhalt.length());
+            output.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+}

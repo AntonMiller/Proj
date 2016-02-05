@@ -1,0 +1,7 @@
+
+
+public class Snippet {
+	public static void main(String[] args) {
+		ausgabe += ("		<>" 		+ spalten[0] + "</>\n");
+	}
+}

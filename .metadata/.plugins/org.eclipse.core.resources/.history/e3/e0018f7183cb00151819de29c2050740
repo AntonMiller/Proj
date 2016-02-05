@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Adding {
+
+WriteFile ob = new WriteFile();
+
+ArrayList list = new ArrayList();
+public void add(){
+
+    list.add("Tim");
+    list.add(2333);
+    list.add(23);
+
+    list.add("John");
+    list.add(423);
+    list.add(23);
+
+    ob.writeXmlFile(list);
+
+    } }
