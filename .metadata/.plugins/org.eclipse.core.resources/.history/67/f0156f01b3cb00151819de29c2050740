@@ -1,0 +1,79 @@
+
+import java.io.*;
+
+public class main {
+
+	public static void main(String[] args) {
+		BufferedReader einlesen = null;
+		String zeile = null;
+		try{
+			einlesen = new BufferedReader(new FileReader("test.csv"));
+		}catch(FileNotFoundException e){
+			System.err.println("Datei nicht gefunden!");
+		}
+		
+		String ausgabe = "";		
+		
+		ausgabe += ("<?xml version=\"1.0\"?>\n");
+		ausgabe += ("<xml\n");
+		
+
+		try{
+			zeile = einlesen.readLine();
+			String[] spalten;
+			while(zeile != null){
+				
+				spalten = zeile.split(",");
+				ausgabe += ("	<Data>\n");
+				int tmp = spalten.length;
+				
+				while(tmp > 0){
+					
+					ausgabe += ("		<>" 		+ spalten[tmp] + "</>\n");
+					tmp--;
+				}
+ 
+				/*
+				ausgabe += ("		<>" 		+ spalten[0] + "</>\n");
+				ausgabe += ("		<>"		+ spalten[1] + "</>\n");
+				ausgabe += ("		<>"		+ spalten[2] + "</>\n");
+				ausgabe += ("		<>"		+ spalten[3] + "</>\n");
+				ausgabe += ("		<>"	+ spalten[4] + "</>\n");
+				ausgabe += ("		<>"	+ spalten[5] + "</>\n");
+				ausgabe += ("		<>"		+ spalten[6] + "</>\n");
+				ausgabe += ("		<>"		+ spalten[7] + "</>\n");
+				*/
+				
+				ausgabe += ("	</Data>\n");
+				zeile = einlesen.readLine();
+			}
+		} 
+		catch (IOException e){
+			System.err.println("Datei kann nicht gelesen werden!");
+		}
+		
+		ausgabe += ("</xml>");
+		System.out.println(ausgabe);
+		BufferedWriter schreiben = null;
+		try{
+			schreiben = new BufferedWriter(new FileWriter("passwd.xml"));
+		}
+		catch (IOException e){
+			System.err.println("Konnte Datei nicht schreiben!");
+		}
+		
+		try{
+			schreiben.write(ausgabe);
+		} catch(IOException e){
+			System.err.println("Konnnte nicht in Datei schreiben!");
+		}
+		
+		try{
+			schreiben.close();
+		} catch(IOException e){
+			System.err.println("Konnnte Datei nicht schliessen!");
+		}
+	}	
+		
+
+}

@@ -1,0 +1,68 @@
+import java.util.Vector;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.text.ParseException;
+
+
+        Vector<String[]> lines = new Vector<String[]>();
+        CSVTokenizer csv = null;
+        BufferedWriter out;
+        String[] header = null;
+        String[] fields = null;
+
+        String csvName = "kunden.csv";
+        String xmlName = "kunden.xml";
+        char separator = ",";
+
+
+
+        try {
+
+            // XML-Datei anlegen
+            out = new BufferedWriter(new FileWriter(xmlName));
+            out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            out.newLine();
+            out.write("<csvimport>");
+            out.newLine();
+
+            // CSV-Datei öffnen
+            csv = new CSVTokenizer(csvName, separator);
+ 
+            // Überschriften einlesen und als XML-Knoten verwenden
+            header = csv.nextLine();
+
+            // Zeilen einlesen und als XML-Knoten ausgeben
+            while (csv.hasMoreLines()) {               
+                out.write("\t <row>");
+                out.newLine();
+
+                fields = csv.nextLine();
+ 
+                // Felder als XML-Knoten ausgeben
+                for(int i = 0; i < header.length; ++i) {
+                    out.write("\t\t <" + header[i] + ">");
+                    out.write(fields[i]);
+                    out.write("</" + header[i] + ">");
+                    out.newLine();
+                }
+                out.write("\t </row>");
+                out.newLine();
+            }
+
+            // XML-Datei abschließen
+            out.write("</csvimport>");
+            out.newLine();
+            out.close();
+
+         } catch(IOException e) {
+             System.out.println("FEHLER beim Oeffnen der Datei");
+         } catch(ParseException e) {
+             System.out.println("FEHLER beim Parsen der Datei in Zeile " 
+                                + e.getErrorOffset());
+         }
+
+    }
+}
+
+

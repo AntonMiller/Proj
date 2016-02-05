@@ -1,0 +1,58 @@
+import java.io.*;
+import java.util.*;
+
+public class CSVReader {
+
+/**
+ * @param args
+ */
+public static void main(String[] args) {
+    String fileName = "C:/Users/karthikrao/Desktop/cvsFile.csv";
+    ArrayList<Integer> margins = new ArrayList<Integer>();
+    BufferedReader br;
+    String line, token;
+    int i;
+    try {
+        br = new BufferedReader(new FileReader(fileName));
+        try {
+            while ((line = br.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(line, ",\"");
+                i = 0;
+                while (st.hasMoreTokens()) {
+                    token = st.nextToken();
+                    if (margins.size() <= i) {
+                        margins.add((Integer) token.length());
+                    } else {
+                        margins.set(
+                                i,
+                                Math.max(margins.get(i),
+                                        (Integer) token.length()));
+                    }
+                    i++;
+                }
+            }
+
+            br = new BufferedReader(new FileReader(fileName));
+            while ((line = br.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(line, ",\"");
+                i = 0;
+                while (st.hasMoreTokens()) {
+                    token = st.nextToken();
+                    System.out.print(token);
+                    for (int j = 0; j < margins.get(i) - token.length(); j++) {
+                        System.out.print(" ");
+                    }
+                    System.out.print("|");
+                    i++;
+                }
+                System.out.println();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+
+}
+}
